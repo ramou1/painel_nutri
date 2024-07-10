@@ -12,13 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from 'src/environments/environment';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getStorage, provideStorage } from '@angular/fire/storage';
-import { AngularFireModule } from '@angular/fire/compat';
 import { registerLocaleData } from '@angular/common';
 import ptBr from "@angular/common/locales/pt";
 import { RecipesComponent } from './pages/recipes/recipes.component';
@@ -39,12 +33,12 @@ registerLocaleData(ptBr);
     IngredientGroupsComponent,
   ],
   imports: [
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    provideAuth(() => getAuth()),
+    // AngularFireModule.initializeApp(environment),
+    // AngularFirestoreModule.enablePersistence(),
+    // provideFirebaseApp(() => initializeApp(environment)),
+    // provideFirestore(() => getFirestore()),
+    // provideStorage(() => getStorage()),
+    // provideAuth(() => getAuth()),
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,

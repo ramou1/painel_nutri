@@ -182,7 +182,6 @@ export class IngredientsComponent extends BasePage implements OnInit {
     const searchTerm = file.files[0];
 
     try {
-      await this.ingredientsSrvc.uploadFile(this.choosedIngredient, file);
       await this.toastrSrvc.success(null, MSG_CONST.EDIT_IMAGE_OK, { icon: '' });
     } catch (e) {
       await this.toastrSrvc.danger(null, MSG_CONST.EDIT_IMAGE_ERROR, { icon: '' });
@@ -227,7 +226,7 @@ export class IngredientsComponent extends BasePage implements OnInit {
       const formData = this.ingredientsForm.value;
       formData.restrictions = this.checkedRestrictions;
       formData.showIn = this.checkedShowIn;
-      await this.ingredientsSrvc.addOrUpdateIngredients(formData);
+      // await this.ingredientsSrvc.addOrUpdateIngredients(formData);
       await this.toastrSrvc.success(null, MSG_CONST.SAVE_DATA_OK, { icon: '' });
       await this.getIngredients();
       this.ingredientsForm.reset();
@@ -286,7 +285,7 @@ export class IngredientsComponent extends BasePage implements OnInit {
         item.groups = groupsArray;
         item.restrictions = restrictionsArray;
         item.showIn = showcaseArray;
-        await this.ingredientsSrvc.addOrUpdateIngredients(item);
+        // await this.ingredientsSrvc.addOrUpdateIngredients(item);
       });
       setTimeout(() => this.loading = false, 3000);
       await this.toastrSrvc.success(null, + newArray.length + MSG_CONST.IMPORT_DATA_OK, { icon: '' });

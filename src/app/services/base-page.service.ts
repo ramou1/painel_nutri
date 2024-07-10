@@ -2,12 +2,8 @@ import { Platform } from '@angular/cdk/platform';
 import { Injectable, Injector } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IngredientsService } from './ingredients.service';
-import { UserService } from './user.service';
 import { StorageService } from './storage.service';
 import { NbDialogService, NbSidebarService, NbToastrService } from '@nebular/theme';
-import { PartnersService } from './partners.service';
-import { RecipesService } from './recipes.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +14,6 @@ export abstract class BasePage {
   protected fb: FormBuilder;
   protected activatedRoute: ActivatedRoute;
   protected dialogSrvc: NbDialogService;
-  protected ingredientsSrvc: IngredientsService;
-  protected partnersSrvc: PartnersService;
   protected platform: Platform;
   protected storage: StorageService;
   protected sidebarSrvc: NbSidebarService;
@@ -30,8 +24,6 @@ export abstract class BasePage {
     this.fb = injector.get(FormBuilder);
     this.activatedRoute = injector.get(ActivatedRoute);
     this.dialogSrvc = injector.get(NbDialogService);
-    this.ingredientsSrvc = injector.get(IngredientsService);
-    this.partnersSrvc = injector.get(PartnersService);
     this.platform = injector.get(Platform);
     this.sidebarSrvc = injector.get(NbSidebarService);
     this.storage = injector.get(StorageService);

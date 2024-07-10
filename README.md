@@ -1,27 +1,23 @@
 # Painel Nutri
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.2.
+Projeto Web de Nutrição criado na versão 15.1.2 do Angular. (Todos os dados são mockados)
 
-## Development server
+## Página Início
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Grupos de Ingredientes
 
-## Code scaffolding
+Página onde podem ser criados grupos para classificar os ingredientes. O usuário deve escolher o nome, slug e categoria do grupo (Carboidratos, Frutas, Gorduras, Proteínas, Saladas e Outros) do ingrediente.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Ingredientes
 
-## Build
+Página onde podem ser criados os ingredientes que serão usados nas receitas. Também é possível adicionar através da Importação de um arquivo XLSX. O usuário deve digitar o nome, tipo do ingrediente (Carboidratos, Frutas, Gorduras, Proteínas, Saladas e Outros), Valor energético (kcal), Quantidade da Porção, Carboidratos totais, Açúcares totais, Açúcares adicionados, Proteínas, Gorduras totais, Gorduras saturadas, Gorduras trans, Fibra alimentar, Sódio, Grupo no qual o ingrediente se enquadra, Restrições Alimentares (Diabético, Alérgico à proteína do leite, Intolerante à lactose, Vegano, Ovolactovegetariano, Ovovegetariano, Lactovegetariano e/ou Celíaco) e onde o ingrediente pode aparecer (Receitas e/ou Cardápio)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# Receitas
 
-## Running unit tests
+# Parceiros
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Usuários
 
-## Running end-to-end tests
+# Privacidade e Termos
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<!-- To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page. -->
