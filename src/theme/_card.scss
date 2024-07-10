@@ -1,0 +1,170 @@
+ nb-card.two-columns {
+     width: 30%;
+     max-width: 450px;
+     display: inline-grid;
+     vertical-align: top;
+     margin: 15px;
+
+     nb-card-body {
+         justify-content: space-between !important;
+         display: flex;
+
+         nb-icon {
+             font-size: 25px;
+         }
+
+         span {
+             align-self: center;
+             font-size: 28px;
+             font-weight: 600;
+             color: #00DA84;
+         }
+     }
+ }
+
+ nb-card-body {
+     box-shadow: none;
+
+     #ingredients-table {
+         width: 1820px;
+     }
+
+     #recipes-table {
+         width: 1920px;
+     }
+
+     #partners-table {
+         width: 800px;
+     }
+
+     #groups-table {
+        width: 800px;
+    }
+
+     #users-table {
+         width: 1640px;
+         //  border-collapse: collapse;
+         border-radius: 20px;
+
+         tr {
+             border-bottom: 2px solid #f3f3f3;
+             height: 40px !important;
+             background: #f9f9f9;
+         }
+
+         .users-table-title {
+             background: #bff6e0;
+             font-size: 13px;
+             height: 35px;
+             text-align: center;
+
+             th {
+                 line-height: 13px;
+                 padding: 0 20px;
+                 max-width: 100px;
+             }
+         }
+
+         tr.users-table-data {
+             font-size: 12px;
+             text-align: center;
+
+             td.tags {
+                 text-align: left;
+                 max-width: 200px;
+
+                 nb-tag {
+                     font-size: 10px !important;
+                     line-height: 18px !important;
+                     margin: 3px;
+                 }
+             }
+
+             td.role-tags {    
+                    nb-tag {
+                        cursor: pointer;
+                        font-size: 10px !important;
+                        line-height: 18px !important;
+                        margin: 3px;
+                    }
+             }
+
+             .no-data {
+                 color: #F64040;
+             }
+         }
+     }
+
+     #ingredients-table,
+     #recipes-table,
+     #partners-table,
+     #groups-table {
+         border-radius: 20px;
+
+         tr {
+             border-bottom: 2px solid #f3f3f3;
+             height: 40px !important;
+             background: #f9f9f9;
+         }
+
+         .ingredients-table-title,
+         .recipes-table-title,
+         .partners-table-title,
+         .groups-table-title {
+             background: #bff6e0;
+             font-size: 11px;
+             text-align: center;
+
+             th {
+                 line-height: 13px;
+                 padding: 0 20px;
+                 max-width: 125px;
+                //  max-width: 100px;
+             }
+         }
+
+         tr.ingredients-table-data,
+         tr.recipes-table-data,
+         tr.partners-table-data,
+         tr.groups-table-data {
+             cursor: pointer;
+             font-size: 12px;
+             text-align: center;
+
+             td {
+                button { padding-left: 0; padding-right: 0; }
+                button+button {
+                    margin: 0;
+                }
+             }
+
+             td.ingredients-list {
+                p {
+                    font-size: 10px;
+                }
+             }
+
+             td.tags {
+                 text-align: left;
+                 //  max-width: 250px;
+
+                 nb-tag {
+                     font-size: 10px !important;
+                     line-height: 18px !important;
+                     margin: 3px;
+                 }
+             }
+
+             .no-data {
+                 color: #F64040;
+             }
+         }
+
+         tr.ingredients-table-data:hover,
+         tr.recipes-table-data:hover,
+         tr.partners-table-data:hover,
+         tr.groups-table-data:hover {
+             background-color: rgba(0, 0, 0, 0.1);
+         }
+     }
+ }

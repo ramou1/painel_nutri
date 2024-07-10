@@ -1,0 +1,251 @@
+<nb-card>
+    <nb-card-header>
+        <div class="first-line">
+            <span class="document-name">
+                Ingredientes ({{ingredients?.length || 0}})
+            </span>
+
+            <div class="right-buttons">
+                <button (click)="openImportDialog(importDialog)" nbButton outline status="success" type="button"
+                    class="form-btn">
+                    Importar XLSX
+                </button>
+
+                <button (click)="openIngredientDialog(addOrUpdateDialog)" nbButton status="success" type="button"
+                    class="form-btn">
+                    Novo Ingrediente
+                </button>
+            </div>
+        </div>
+
+        <div class="custom-search">
+            <input type="text" nbInput fullWidth placeholder="Pesquisar ingredientes..."
+                (input)="filterIngredients($event)">
+        </div>
+    </nb-card-header>
+
+    <ng-template #importDialog let-data let-ref="dialogRef">
+        <nb-card class="import-dialog" [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="large"
+            nbSpinnerMessage="">
+            <nb-card-header style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="document-name">
+                    Importar XLSX
+                </span>
+
+                <div style="float: right">
+                    <button (click)="document.click()" nbButton outline status="success" type="button" class="form-btn">
+                        Escolher Arquivo
+                    </button>
+                    <input class="hide-element" #document type="file" (change)="importData($event)" accept=".xlsx">
+                </div>
+            </nb-card-header>
+            <nb-card-body *ngIf="importedData.length > 0">
+                <h3>Associe os títulos</h3>
+
+                <form [formGroup]="importedForm">
+                    <div *ngFor="let column of columns.slice(0, -1); index as i" class="two-columns">
+                        <h4>{{column}}</h4>
+                        <nb-select placeholder="Título da Coluna" [formControlName]="importColumn[i]">
+                            <nb-option *ngFor="let title of importedTitles" [value]="title">{{title}}</nb-option>
+                        </nb-select>
+                    </div>
+                </form>
+            </nb-card-body>
+            <nb-card-footer>
+                <button (click)="ref.close()" nbButton status="danger" type="button">
+                    Cancelar
+                </button>
+                <button [disabled]="importedForm.invalid" (click)="finalize(); ref.close()" nbButton status="success"
+                    type="button">
+                    Importar Arquivos
+                </button>
+            </nb-card-footer>
+        </nb-card>
+    </ng-template>
+
+    <nb-card-body style="padding: 0 !important;">
+        <table id="ingredients-table">
+            <tr class="ingredients-table-title">
+                <th *ngFor="let column of columns">{{column}}</th>
+            </tr>
+            <tr *ngFor="let ingredient of filteredIngredients | paginate: { itemsPerPage: 20, currentPage: p }; index as i;"
+                class="ingredients-table-data">
+                <td>{{ingredient?.title}}</td>
+                <td>{{getTypeName(ingredient?.type)}}</td>
+                <td class="tags"><nb-tag *ngFor="let group of ingredient.groups" [text]="getGroupTitle(group)"
+                        status="primary"></nb-tag></td>
+                <td>{{ingredient?.totalPortion}}g</td>
+                <td>{{ingredient?.energeticValue || 0 | number:'1.0-2'}}kcal</td>
+                <td>{{ingredient?.totalCarbohydrates || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient?.totalSugars || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient?.addedSugars || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient?.proteins || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient?.totalFat || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient?.saturatedFat || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient.transFats || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient.dietaryFiber || 0 | number:'1.0-2'}}g</td>
+                <td>{{ingredient.sodium || 0 | number:'1.0-2'}}mg</td>
+                <td class="tags"><nb-tag *ngFor="let restriction of ingredient.restrictions"
+                        [text]="getRestrictionName(restriction)" status="primary"></nb-tag></td>
+                <td class="tags"><nb-tag *ngFor="let showcase of ingredient.showIn"
+                        [text]="showcase === 'recipes' ? 'Receitas' : 'Cardápio'" status="info"></nb-tag></td>
+                <td>
+                    <button nbButton (click)="openIngredientDialog(addOrUpdateDialog, ingredient)" status="success"
+                        type="button" class="form-btn" ghost>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                    <button nbButton (click)="openIngredientDialog(deleteDialog)" status="danger" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="trash-outline"></nb-icon>
+                    </button>
+                    <ng-template #deleteDialog let-data let-ref="dialogRef">
+                        <nb-card class="confirm-dialog">
+                            <nb-card-header>Confirmação de Exclusão</nb-card-header>
+                            <nb-card-body>
+                                Confirma a exclusão do ingrediente {{ingredient?.title}}? Essa ação é irreversível.
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button (click)="deleteIngredient(ingredient?.id); ref.close()" nbButton
+                                    status="success" type="button">
+                                    Sim, excluir
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+
+        <ng-template #addOrUpdateDialog let-data let-ref="dialogRef">
+            <nb-card>
+                <nb-card-header>{{editing ? 'Atualizar' : 'Adicionar'}} Ingrediente</nb-card-header>
+                <nb-card-body>
+                    <form [formGroup]="ingredientsForm">
+                        <!-- TODO: ALTERAR IMAGEM QND NÃO TIVER CHOOSEDINGREDIENT -->
+                        <!-- <div class="row" *ngIf="choosedIngredient">
+                            <img class="ingredient-image" style="height: 100px; width: auto"
+                                *ngIf="choosedIngredient.image" [src]="choosedIngredient.image" />
+                        </div>
+                        <div class="row" *ngIf="choosedIngredient">
+                            <input nbInput (change)="uploadFile($event.target)" accept="image/*" type="file"
+                                class="input-image" />
+                        </div> -->
+                        <div class="row">
+                            <input type="text" nbInput fullWidth placeholder="Nome do Ingrediente"
+                                formControlName="title">
+                            <nb-select fullWidth placeholder="Tipo de Ingrediente" formControlName="type">
+                                <nb-option *ngFor="let cat of categories"
+                                    [value]="cat.shortTitle">{{cat.title}}</nb-option>
+                            </nb-select>
+                        </div>
+
+                        <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Qtd. Porção (g)"
+                                formControlName="totalPortion">
+                            <input type="number" nbInput fullWidth placeholder="Valor energético (kcal)"
+                                formControlName="energeticValue">
+                        </div>
+
+                        <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Carboidratos totais (g)"
+                                formControlName="totalCarbohydrates">
+                            <input type="number" nbInput fullWidth placeholder="Açúcares totais (g)"
+                                formControlName="totalSugars">
+                            <input type="number" nbInput fullWidth placeholder="Açúcares adicionados (g)"
+                                formControlName="addedSugars">
+                        </div>
+
+                        <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Proteínas (g)"
+                                formControlName="proteins">
+                            <input type="number" nbInput fullWidth placeholder="Gorduras totais (g)"
+                                formControlName="totalFat">
+                            <input type="number" nbInput fullWidth placeholder="Gorduras saturadas (g)"
+                                formControlName="saturatedFat">
+                        </div>
+
+                        <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Gorduras trans (g)"
+                                formControlName="transFats">
+                            <input type="number" nbInput fullWidth placeholder="Fibra alimentar (g)"
+                                formControlName="dietaryFiber">
+                            <input type="number" nbInput fullWidth placeholder="Sódio (mg)" formControlName="sodium">
+                        </div>
+
+                        <div>
+                            <!-- <h4>Selecione o grupo:</h4> -->
+                            <input type="text" nbInput fullWidth placeholder="Selecionar o grupo..."
+                                (input)="filterGroupList($event)">
+                            <ul class="group-list">
+                                <li *ngFor="let group of filteredIngredientGroups"
+                                    (click)="onIngredientGroupChoose(group)"
+                                    [ngClass]="group?.isClicked ? 'group-selected' : ''">
+                                    {{ group.title }}
+                                </li>
+                            </ul>
+                            <nb-tag-list (tagRemove)="onGroupRemove($event)">
+                                <nb-tag *ngFor="let group of choosedIngredient?.groups" [text]="getGroupTitle(group)"
+                                    status="primary" [removable]="true"></nb-tag>
+                            </nb-tag-list>
+                        </div>
+
+                        <div class="container">
+                            Restrições:
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(0, 3)"
+                                    value="restriction.value"
+                                    [checked]="editing ? isChecked(choosedIngredient['restrictions'], restriction.value) : false"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(3, 6)"
+                                    value="restriction.value"
+                                    [checked]="editing ? isChecked(choosedIngredient['restrictions'], restriction.value) : false"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(6, -1)"
+                                    value="restriction.value"
+                                    [checked]="editing ? isChecked(choosedIngredient['restrictions'], restriction.value) : false"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            Aparece em:
+                            <div class="item same-row">
+                                <nb-checkbox *ngFor="let showcase of showcases" value="usage.value"
+                                    [checked]="editing ? isChecked(choosedIngredient['showIn'], showcase.value) : false"
+                                    (checkedChange)="checkShowIn($event, showcase.value)">
+                                    {{ showcase.label }}
+                                </nb-checkbox>
+                            </div>
+                        </div>
+
+                    </form>
+                </nb-card-body>
+
+                <nb-card-footer>
+                    <button (click)="ref.close(); getIngredients();" nbButton status="danger" type="button">
+                        Fechar
+                    </button>
+                    <button [disabled]="ingredientsForm.invalid" (click)="addOrUpdateIngredient(); ref.close()" nbButton
+                        status="success" type="button">
+                        {{editing ? 'Atualizar' : 'Adicionar'}}
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </nb-card-body>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</nb-card>

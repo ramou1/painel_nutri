@@ -1,0 +1,56 @@
+nb-layout-header {
+    background: #359D9E;
+
+    .profile-picture {
+        margin-right: 10px;
+
+        >img {
+            border-radius: 50%;
+            width: 36px !important;
+            height: 36px !important;
+        }
+    }
+
+    nb-icon {
+        color: #fff;
+    }
+}
+
+.logo {
+    max-width: 150px;
+    margin: 0 auto;
+    margin-top: 18%;
+    margin-bottom: 10%;
+    display: block;
+}
+
+.first-column {
+    font-weight: 600;
+    color: #fff;
+}
+
+.second-column {
+    margin-left: auto;
+    margin-right: 1%;
+}
+
+// nb-icon svg {
+//     min-height: 22px !important;
+//     min-width: 22px !important;
+// }
+
+nb-layout-footer {
+    span {
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    a {
+        padding-top: 2px;
+        padding-right: 5px;
+
+        img {
+            width: 14px;
+        }
+    }
+}

@@ -1,0 +1,84 @@
+nb-card {
+    width: 65vw;
+    max-height: 85vh;
+}
+
+button+button {
+    margin-left: 1rem;
+}
+
+.ingredient-image {
+    margin: 0 auto;
+    display: block;
+}
+
+.hide-element {
+    display: none;
+}
+
+.two-columns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+form.ingredients-form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: 10px 0;
+    margin-bottom: 3vh;
+
+    div:nth-child(-n+2) {
+        width: 245px;
+        // max-width: 245px;
+    }
+
+    div:last-child {
+        margin-top: 4.5vh;
+    }
+
+    div {
+        h4 {
+            margin-bottom: 0;
+        }
+
+        ul.ingredient-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                padding: 8px 5px;
+            }
+
+            li:hover {
+                background: #e4e7ed;
+            }
+
+            li.ingredient-selected {
+                background: #e4e7ed;
+            }
+        }
+    }
+}
+
+div.choosed-ingredients {
+    margin-bottom: 3vh;
+    // p {
+    //     font-size: 12px;
+    // }
+}
+
+
+.margin-top {
+    margin-top: 4vh;
+    display: block;
+}
+
+div.container {
+    margin: 0;
+    padding: 3vh 0;
+    border-top: 2px solid #23666739;
+}

@@ -1,0 +1,86 @@
+<nb-card>
+    <nb-card-header>
+        <span class="document-name">
+            Parceiros ({{partners?.length}})
+        </span>
+        <div style="float: right">
+            <button (click)="openDialog(addOrUpdateDialog)" nbButton status="success" type="button" class="form-btn">
+                Novo Parceiro
+            </button>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body style="padding: 0 !important;">
+        <table id="partners-table">
+            <tr class="partners-table-title">
+                <th *ngFor="let column of columns">{{column}}</th>
+            </tr>
+            <tr *ngFor="let partner of partners; index as i;" class="partners-table-data">
+                <td>{{partner.registerDate | date: 'dd/MM/yy'}}</td>
+                <td>{{partner?.title}}</td>
+                <td>{{partner?.coupon}}</td>
+                <!-- <td>{{partner?.commissionPercentage}}</td> -->
+                <td>
+                    <button nbButton (click)="openDialog(addOrUpdateDialog, partner)" status="success" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                    <button nbButton (click)="openDeleteConfirmation(deleteDialog)" status="danger" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="trash-outline"></nb-icon>
+                    </button>
+
+                    <ng-template #deleteDialog let-data let-ref="dialogRef">
+                        <nb-card>
+                            <nb-card-header>Confirmação de Exclusão</nb-card-header>
+                            <nb-card-body>
+                                Confirma a exclusão do parceiro {{partner?.title}} da base de dados? Essa ação é
+                                irreversível.
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button (click)="deletePartner(partner?.id); ref.close()" nbButton status="success"
+                                    type="button">
+                                    Sim, excluir parceiro
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+
+        <ng-template #addOrUpdateDialog let-data let-ref="dialogRef">
+            <nb-card>
+                <nb-card-header>{{editing ? 'Atualizar' : 'Adicionar'}} Parceiro</nb-card-header>
+                <nb-card-body>
+                    <form [formGroup]="partnersForm">
+                        <div class="row">
+                            <input type="text" nbInput fullWidth placeholder="Nome do Parceiro" formControlName="title">
+                        </div>
+
+                        <div class="row">
+                            <input type="text" nbInput fullWidth placeholder="Cupom (Código)" formControlName="coupon">
+                        </div>
+
+                        <!-- <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Porcentagem de Comissão (%)" formControlName="commissionPercentage">
+                        </div> -->
+                    </form>
+                </nb-card-body>
+
+                <nb-card-footer>
+                    <button (click)="ref.close(); getPartners();" nbButton status="danger" type="button">
+                        Fechar
+                    </button>
+                    <button [disabled]="partnersForm.invalid" (click)="addOrUpdatePartner(); ref.close()" nbButton
+                        status="success" type="button">
+                        {{editing ? 'Atualizar' : 'Adicionar'}}
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+    </nb-card-body>
+</nb-card>

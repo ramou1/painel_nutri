@@ -1,0 +1,39 @@
+.home-background {
+    nb-layout-column {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+  
+      nb-card {
+        width: 50%;
+        max-width: 450px;
+        height: fit-content;
+        border: none;
+      }
+    }
+  
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 7vh;
+  
+      img {
+        width: 50%;
+      }
+    }
+  
+    .form {
+      padding: 2vh 4vh;
+    }
+  }
+  
+  .painel-type {
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+  }
+  
+  .footer-button {
+    margin-top: 4vh;
+  }

@@ -1,0 +1,38 @@
+@forward '@nebular/theme/styles/theming';
+@use '@nebular/theme/styles/theming' as *;
+@use '@nebular/theme/styles/themes/corporate';
+
+@use "theme/card";
+@use "theme/dialog";
+@use "theme/header";
+@use "theme/form";
+@use "theme/pagination";
+@use "theme/typography";
+
+$nb-themes: nb-register-theme((
+
+  // add your variables here like:
+
+  color-primary-100: #8fbba9,
+  color-primary-200: #80cfaf,
+  color-primary-300: #48dba0,
+  color-primary-400: #24d48e,
+  color-primary-500: #00DA84,
+  color-primary-600: #04b76f,
+  color-primary-700: #01a966,
+  color-primary-800: #007546,
+  color-primary-900: #00462a,
+
+  font-family: 'Poppins'
+
+), corporate, corporate);
+
+* {
+  font-family: 'Poppins' !important;
+}
+
+div.divisor {
+  height: 3px;
+  background: #bff6e0;
+  margin: 45px 0;
+}

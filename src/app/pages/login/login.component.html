@@ -1,0 +1,44 @@
+<nb-layout class="home-background">
+
+    <nb-layout-column>
+        <nb-card>
+            <div class="logo">
+                <img class="center" src="assets/images/logo-meelnutri.svg" alt="Painel Nutri">
+            </div>
+
+            <nb-tag-list class="painel-type">
+                <nb-tag appearance="filled" text="Sandbox (Apenas Teste)" status="warning" *ngIf="!production"></nb-tag>
+                <nb-tag appearance="filled" text="Em Produção" status="info" *ngIf="production"></nb-tag>
+            </nb-tag-list>
+
+            <div class="form">
+
+                <form [formGroup]="loginForm">
+                    <div class="row">
+                        <input placeholder="Digite seu e-mail" formControlName="email" type="text" nbInput fullWidth
+                            fieldSize="large">
+                    </div>
+
+                    <div class="row">
+                        <input placeholder="Digite sua senha" formControlName="password" type="password" nbInput
+                            fullWidth fieldSize="large">
+                    </div>
+
+                    <div class="row footer-button">
+                        <button nbButton type="submit" (click)="login()" fullWidth
+                            status="primary" size="large" [disabled]="loginForm.invalid">Login
+                        </button>
+                    </div>
+
+                    <!-- <div class="row">
+                        <button nbButton ghost type="submit" (click)="forgotPassword()" fullWidth
+                            status="primary">Esqueci minha senha</button>
+                    </div> -->
+                </form>
+
+            </div>
+
+        </nb-card>
+    </nb-layout-column>
+
+</nb-layout>

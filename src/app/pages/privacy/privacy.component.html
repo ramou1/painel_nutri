@@ -1,0 +1,45 @@
+<nb-card *ngFor="let priv of privacy; index as i;">
+    <nb-card-header>
+        <span class="document-name">
+            Política de Privacidade #{{i + 1}}
+        </span>
+        <div style="float: right">
+            <button [disabled]="!priv.isEditing" (click)="save(priv, 'privacy')" nbButton status="success" type="button"
+                class="form-btn">
+                Salvar
+            </button>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body>
+        <h4>Título</h4>
+        <input nbInput fullWidth type="text" placeholder="Título" [(ngModel)]="priv.title"
+            (ngModelChange)="priv.isEditing = true;">
+        <h4>Descrição</h4>
+        <textarea rows="10" nbInput fullWidth placeholder="Descrição" [(ngModel)]="priv.text"
+            (ngModelChange)="priv.isEditing = true;"></textarea>
+    </nb-card-body>
+</nb-card>
+
+<nb-card *ngFor="let term of terms; index as i;">
+    <nb-card-header>
+        <span class="document-name">
+            Termos de Uso
+        </span>
+        <div style="float: right">
+            <button [disabled]="!term.isEditing" (click)="save(term, 'terms')" nbButton status="success" type="button"
+                class="form-btn">
+                Salvar
+            </button>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body>
+        <h4>Título</h4>
+        <input nbInput fullWidth type="text" placeholder="Título" [(ngModel)]="term.title"
+            (ngModelChange)="term.isEditing = true;">
+        <h4>Descrição</h4>
+        <textarea rows="10" nbInput fullWidth placeholder="Descrição" [(ngModel)]="term.text"
+            (ngModelChange)="term.isEditing = true;"></textarea>
+    </nb-card-body>
+</nb-card>

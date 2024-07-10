@@ -1,0 +1,30 @@
+// .confirm-dialog {
+nb-card.confirm-dialog {
+    width: 28vw;
+    text-align: center;
+
+    nb-card-body {
+        padding: 16px !important;
+    }
+}
+
+// }
+
+nb-card.import-dialog {
+    width: 40vw;
+    text-align: center;
+    
+
+    h3 {
+        margin: 0 !important;
+    }
+
+    nb-card-body {
+        padding: 16px !important;
+
+        h4 {
+            margin: 0 !important;
+            margin-right: 15px !important;
+        }
+    }
+}

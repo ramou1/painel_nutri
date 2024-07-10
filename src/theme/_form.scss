@@ -1,0 +1,63 @@
+form {
+  .row {
+    display: flex;
+    margin: 15px 0;
+    gap: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+}
+
+nb-card-footer {
+  justify-content: space-between;
+  display: flex;
+}
+
+[nbInput].size-medium:not(.input-full-width) {
+  max-width: 80% !important;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  --input-medium-text-font-size: 12px;
+}
+
+div.container {
+  margin-top: 5vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  div.item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 4%;
+
+    nb-checkbox {
+      label.label {
+        align-items: flex-start !important;
+      }
+    }
+  }
+
+  div.item:last-child {
+    margin-right: 0;
+  }
+
+  div.same-row {
+    flex-direction: row;
+
+    nb-checkbox {
+      margin-right: 20px;
+    }
+  }
+}
+
+nb-tag-list {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}

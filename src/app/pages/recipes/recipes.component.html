@@ -1,0 +1,287 @@
+<nb-card>
+    <nb-card-header>
+        <div class="first-line">
+            <span class="document-name">
+                Receitas ({{recipes.length || 0}})
+            </span>
+
+            <div class="right-buttons">
+                <button (click)="exportFile()" nbButton outline status="info" type="button" class="form-btn"
+                    [disabled]="recipes.length === 0">
+                    Exportar XLSX
+                </button>
+
+                <button (click)="openImportDialog(importDialog)" nbButton outline status="success" type="button"
+                    class="form-btn">
+                    Importar XLSX
+                </button>
+
+                <button (click)="openDialog(addOrUpdateDialog)" nbButton status="success" type="button"
+                    class="form-btn">
+                    Nova Receita
+                </button>
+            </div>
+        </div>
+
+        <div class="custom-search">
+            <input type="text" nbInput fullWidth placeholder="Pesquisar receita..." (input)="filterRecipes($event)">
+        </div>
+    </nb-card-header>
+
+    <ng-template #importDialog let-data let-ref="dialogRef">
+        <nb-card class="import-dialog" [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="large"
+            nbSpinnerMessage="">
+            <nb-card-header style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="document-name">
+                    Importar XLSX
+                </span>
+
+                <div style="float: right">
+                    <button (click)="getDocumentModel()" nbButton ghost status="info" type="button" size="tiny">
+                        Baixar Modelo
+                    </button>
+                    <button (click)="document.click()" nbButton outline status="success" type="button" class="form-btn">
+                        Escolher Arquivo
+                    </button>
+                    <input class="hide-element" #document type="file" (change)="importData($event)" accept=".xlsx">
+                </div>
+            </nb-card-header>
+            <nb-card-body *ngIf="importedData.length > 0">
+                <h3>Associe os títulos</h3>
+
+                <form [formGroup]="importedForm">
+                    <div *ngFor="let column of columns; index as i" class="two-columns">
+                        <h4>{{column}}</h4>
+                        <nb-select placeholder="Título da Coluna" [formControlName]="importColumn[i]">
+                            <nb-option *ngFor="let title of importedTitles" [value]="title">{{title}}</nb-option>
+                        </nb-select>
+                        <!-- <button nbButton ghost (click)="importColumn[i] = ''">
+                            <nb-icon icon="trash-outline"></nb-icon>
+                          </button> -->
+                    </div>
+                </form>
+            </nb-card-body>
+            <nb-card-footer>
+                <button (click)="ref.close()" nbButton status="danger" type="button">
+                    Cancelar
+                </button>
+                <button [disabled]="importedForm.invalid" (click)="finalize(); ref.close()" nbButton status="success"
+                    type="button">
+                    Importar Arquivos
+                </button>
+            </nb-card-footer>
+        </nb-card>
+    </ng-template>
+
+    <nb-card-body style="padding: 0 !important;">
+        <table id="recipes-table">
+            <tr class="recipes-table-title">
+                <th *ngFor="let column of tableColumns">{{column}}</th>
+            </tr>
+            <tr *ngFor="let recipe of filteredRecipes | paginate: { itemsPerPage: 20, currentPage: p }; index as i;"
+                class="recipes-table-data">
+                <td>{{recipe?.title}}</td>
+                <td>{{recipe?.description.substring(0, 200) + '...'}}</td>
+                <td class="ingredients-list">
+                    <p *ngFor="let ingred of recipe?.ingredients">{{ingred.title}} ({{ingred.totalPortion}}g) </p>
+                </td>
+                <td>{{recipe?.totalPortion || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.energeticValue || 0 | number:'1.0-2'}}kcal</td>
+                <td>{{recipe?.totalCarbohydrates || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.totalSugars || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.addedSugars || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.proteins || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.totalFat || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe?.saturatedFat || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe.transFats || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe.dietaryFiber || 0 | number:'1.0-2'}}g</td>
+                <td>{{recipe.sodium || 0 | number:'1.0-2'}}mg</td>
+                <td class="tags"><nb-tag *ngFor="let restriction of recipe.restrictions"
+                        [text]="getRestrictionName(restriction)" status="primary"></nb-tag></td>
+                <td class="tags"><nb-tag *ngFor="let usage of recipe.usedIn" [text]="getUsageName(usage)"
+                        status="info"></nb-tag></td>
+                <td>
+                    <button nbButton (click)="openDialog(addOrUpdateDialog, recipe)" status="success" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                    <button nbButton (click)="openDialog(deleteDialog)" status="danger" type="button" ghost
+                        class="form-btn">
+                        <nb-icon icon="trash-outline"></nb-icon>
+                    </button>
+                    <ng-template #deleteDialog let-data let-ref="dialogRef">
+                        <nb-card class="confirm-dialog">
+                            <nb-card-header>Confirmação de Exclusão</nb-card-header>
+                            <nb-card-body>
+                                Confirma a exclusão da receita {{recipe?.title}}? Essa ação é irreversível.
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button (click)="deleteRecipe(recipe?.id); ref.close()" nbButton status="success"
+                                    type="button">
+                                    Sim, excluir
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+
+        <ng-template #addOrUpdateDialog let-data let-ref="dialogRef">
+            <nb-card>
+                <nb-card-header>{{editing ? 'Atualizar' : 'Adicionar'}} Receita</nb-card-header>
+                <nb-card-body>
+                    <form [formGroup]="recipesForm">
+                        <div class="row">
+                            <input type="text" nbInput fullWidth placeholder="Nome da Receita" formControlName="title">
+                        </div>
+
+                        <div class="row">
+                            <textarea rows="8" nbInput fullWidth placeholder="Passo-a-Passo da Receita"
+                                formControlName="description"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <input type="number" nbInput fullWidth placeholder="Qtd. Porção (g)"
+                                formControlName="totalPortion" readonly>
+                        </div>
+
+                        <nb-checkbox [checked]="showMacros" (checkedChange)="toggle($event)" class="margin-top">Inserir
+                            Macros Manualmente</nb-checkbox>
+
+                        <div *ngIf="showMacros">
+                            <div class="row">
+                                <input type="number" nbInput fullWidth placeholder="Valor energético (kcal)"
+                                    formControlName="energeticValue">
+                                <input type="number" nbInput fullWidth placeholder="Carboidratos totais (g)"
+                                    formControlName="totalCarbohydrates">
+                            </div>
+
+                            <div class="row">
+                                <input type="number" nbInput fullWidth placeholder="Açúcares totais (g)"
+                                    formControlName="totalSugars">
+                                <input type="number" nbInput fullWidth placeholder="Açúcares adicionados (g)"
+                                    formControlName="addedSugars">
+                            </div>
+
+                            <div class="row">
+                                <input type="number" nbInput fullWidth placeholder="Proteínas (g)"
+                                    formControlName="proteins">
+                                <input type="number" nbInput fullWidth placeholder="Gorduras totais (g)"
+                                    formControlName="totalFat">
+                                <input type="number" nbInput fullWidth placeholder="Gorduras saturadas (g)"
+                                    formControlName="saturatedFat">
+                            </div>
+
+                            <div class="row">
+                                <input type="number" nbInput fullWidth placeholder="Gorduras trans (g)"
+                                    formControlName="transFats">
+                                <input type="number" nbInput fullWidth placeholder="Fibra alimentar (g)"
+                                    formControlName="dietaryFiber">
+                                <input type="number" nbInput fullWidth placeholder="Sódio (mg)"
+                                    formControlName="sodium">
+                            </div>
+                        </div>
+
+                        <form [formGroup]="searchForm" class="ingredients-form" *ngIf="!showMacros">
+                            <div>
+                                <h4>Selecione o ingrediente:</h4>
+                                <input type="text" nbInput fullWidth placeholder="Pesquisar..."
+                                    (input)="filterIngredientsList($event)">
+                                <ul class="ingredient-list">
+                                    <li *ngFor="let ingredient of filteredIngredients"
+                                        (click)="onIngredientChoose(ingredient)"
+                                        [ngClass]="ingredient?.isClicked ? 'ingredient-selected' : ''">
+                                        {{ ingredient.title }}
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4>Gramas:</h4>
+                                <input type="number" nbInput fullWidth placeholder="Gramas"
+                                    formControlName="ingredPortion">
+                            </div>
+
+                            <div>
+                                <button [disabled]="searchForm.invalid" (click)="onIngredientAdd();" nbButton
+                                    status="success" type="button">Adicionar</button>
+                            </div>
+                        </form>
+
+                        <div *ngIf="choosedIngredients.length > 0 && !showMacros" class="choosed-ingredients">
+                            <nb-tag-list (tagRemove)="onIngredientRemove($event)">
+                                <nb-tag *ngFor="let ingred of choosedIngredients"
+                                    [text]="ingred?.title + ' (' + ingred?.totalPortion + 'g)'"
+                                    [removable]="true"></nb-tag>
+                            </nb-tag-list>
+                        </div>
+
+                        <div class="container">
+                            Restrições:
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(0, 3)"
+                                    value="restriction.value" [checked]="isChecked(restriction.value, 'restriction')"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(3, 6)"
+                                    value="restriction.value" [checked]="isChecked(restriction.value, 'restriction')"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let restriction of restrictions.slice(6, -1)"
+                                    value="restriction.value" [checked]="isChecked(restriction.value, 'restriction')"
+                                    (checkedChange)="checkRestriction($event, restriction.value)">
+                                    {{ restriction.label }}
+                                </nb-checkbox>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            Usado em:
+                            <div class="item">
+                                <nb-checkbox *ngFor="let usage of usages.slice(0, 2)" value="usage.value" checked="true"
+                                    (checkedChange)="checkUsedIn($event, usage.value)">
+                                    {{ usage.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let usage of usages.slice(2, 4)" value="usage.value" checked="true"
+                                    (checkedChange)="checkUsedIn($event, usage.value)">
+                                    {{ usage.label }}
+                                </nb-checkbox>
+                            </div>
+                            <div class="item">
+                                <nb-checkbox *ngFor="let usage of usages.slice(4, 6)" value="usage.value" checked="true"
+                                    (checkedChange)="checkUsedIn($event, usage.value)">
+                                    {{ usage.label }}
+                                </nb-checkbox>
+                            </div>
+                        </div>
+
+                    </form>
+                </nb-card-body>
+
+                <nb-card-footer>
+                    <button (click)="ref.close(); getRecipes();" nbButton status="danger" type="button">
+                        Fechar
+                    </button>
+                    <button [disabled]="recipesForm.invalid" (click)="addOrUpdateRecipe(); ref.close()" nbButton
+                        status="success" type="button">
+                        {{editing ? 'Atualizar Receita' : 'Salvar Receita'}}
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </nb-card-body>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</nb-card>

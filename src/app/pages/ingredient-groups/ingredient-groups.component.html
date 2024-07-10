@@ -1,0 +1,93 @@
+<nb-card>
+    <nb-card-header>
+        <span class="document-name">
+            Grupos de Ingredientes ({{groups?.length}})
+        </span>
+        <div style="float: right">
+            <button (click)="openDialog(addOrUpdateDialog)" nbButton status="success" type="button" class="form-btn">
+                Novo Grupo
+            </button>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body style="padding: 0 !important;">
+        <table id="groups-table">
+            <tr class="groups-table-title">
+                <th *ngFor="let column of columns">{{column}}</th>
+            </tr>
+            <tr *ngFor="let group of groups; index as i;" class="groups-table-data">
+                <td>{{group?.title}}</td>
+                <td>{{group?.slug}}</td>
+                <td>0</td>
+                <td>{{getTypeName(group?.type)}}</td>
+                <td>
+                    <button nbButton (click)="openDialog(addOrUpdateDialog, group)" status="success" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                    <button nbButton (click)="openDeleteConfirmation(deleteDialog)" status="danger" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="trash-outline"></nb-icon>
+                    </button>
+
+                    <ng-template #deleteDialog let-data let-ref="dialogRef">
+                        <nb-card>
+                            <nb-card-header>Confirmação de Exclusão</nb-card-header>
+                            <nb-card-body>
+                                Confirma a exclusão do grupo {{group?.title}} da base de dados? Essa ação é
+                                irreversível.
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button (click)="deleteIngredientGroup(group?.id); ref.close()" nbButton status="success"
+                                    type="button">
+                                    Sim, excluir grupo
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+
+        <ng-template #addOrUpdateDialog let-data let-ref="dialogRef">
+            <nb-card>
+                <nb-card-header>{{editing ? 'Atualizar' : 'Adicionar'}} Grupo de Ingrediente</nb-card-header>
+                <nb-card-body>
+                    <form [formGroup]="groupsForm">
+                        <div class="row">
+                            <div>
+                                <label>Nome do Grupo</label>
+                                <input type="text" nbInput fullWidth placeholder="Nome do Grupo" formControlName="title">
+                            </div>
+
+                            <div>
+                                <label>Slug</label>
+                                <input type="text" nbInput fullWidth placeholder="Slug do Grupo" formControlName="slug">
+                            </div>
+
+                            <div> 
+                                <label>Categoria</label>
+                                <nb-select placeholder="Categoria" formControlName="type">
+                                    <nb-option *ngFor="let cat of categories" [value]="cat.shortTitle">{{cat.title}}</nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </form>
+                </nb-card-body>
+
+                <nb-card-footer>
+                    <button (click)="ref.close(); getIngredientGroups();" nbButton status="danger" type="button">
+                        Fechar
+                    </button>
+                    <button [disabled]="groupsForm.invalid" (click)="addOrUpdateIngredientGroup(); ref.close()" nbButton
+                        status="success" type="button">
+                        {{editing ? 'Atualizar' : 'Adicionar'}}
+                    </button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+    </nb-card-body>
+</nb-card>

@@ -1,0 +1,16 @@
+.ngx-pagination {
+    padding: 0;
+
+    span, a {
+        font-size: 13px !important;
+    }
+}
+
+.ngx-pagination .current {
+    background: #00d68f !important;
+    border-radius: 15px;
+}
+
+span.ng-star-inserted {
+    // font-size: 13px !important;
+}

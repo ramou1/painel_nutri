@@ -1,0 +1,112 @@
+<nb-card>
+    <nb-card-header>
+        <span class="document-name">
+            Usuários ({{users?.length}})
+        </span>
+        <!-- <div style="float: right">
+            <button (click)="exportExcel()" nbButton status="success" type="button" class="form-btn">
+                Exportar Excel
+                <nb-icon icon="download-outline"></nb-icon>
+            </button>
+        </div> -->
+    </nb-card-header>
+
+    <nb-card-body style="padding: 0 !important;">
+        <table id="users-table">
+            <tr class="users-table-title">
+                <th *ngFor="let column of columns">{{column}}</th>
+            </tr>
+            <tr *ngFor="let user of users; index as i;" class="users-table-data">
+                <td>{{user.registerDate | date: 'dd/MM/yy'}}</td>
+                <td>{{user?.name}}</td>
+                <td>{{user?.email}}</td>
+                <td *ngIf="user?.signature && user.signature.plan?.type != 0">{{user?.signature.plan ?
+                    user?.signature.plan.title : '---'}}</td>
+                <td *ngIf="user?.signature && user.signature.plan?.type === 0" (click)="openPlanDialog(planDialog)" class="trial-column">
+                    {{user?.signature.plan ? user?.signature.plan.title : '---'}}
+                    <ng-template #planDialog let-data let-ref="dialogRef">
+                        <nb-card class="import-dialog">
+                            <nb-card-header>
+                                <span class="document-name">
+                                    Escolher Plano
+                                </span>
+                            </nb-card-header>
+                            <nb-card-body>
+                                <h3>Escolha o plano combinado com o usuário:</h3>
+
+                                <form [formGroup]="planForm">
+                                    <nb-select placeholder="Tipo de Plano" formControlName="plan">
+                                        <nb-option *ngFor="let plan of plans" [value]="plan">{{plan.title}}</nb-option>
+                                    </nb-select>
+                                </form>
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button [disabled]="planForm.invalid" (click)="savePlan(user?.id); ref.close()" nbButton
+                                    status="success" type="button">
+                                    Salvar Informações
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+                <!-- </div> -->
+                <td>{{getGenderName(user?.gender)}}</td>
+                <td>{{getObjectiveName(user?.objective)}}</td>
+                <td>{{user.tmb?.toFixed(1)}}</td>
+                <td>{{user.get?.toFixed(1)}}</td>
+                <td>{{user?.weight}} kg</td>
+                <td>{{user?.age}}</td>
+                <td>{{user?.level}}</td>
+                <td>{{user?.coins}}</td>
+                <td class="tags"><nb-tag *ngFor="let restriction of user.restrictions"
+                        [text]="getRestrictionName(restriction)" status="primary"></nb-tag></td>
+                <td class="role-tags">
+                    <nb-tag [text]="user.role === 'admin' ? 'Administrador' : 'Usuário'"
+                        [status]="user.role === 'admin' ? 'primary' : 'warning'" [nbPopover]="rolePopover"
+                        nbPopoverPlacement="left"></nb-tag>
+
+                    <ng-template #rolePopover>
+                        <nb-list class="role-popover">
+                            <nb-list-item (click)="changeUserRole(user, 'admin')">Administrador</nb-list-item>
+                            <nb-list-item (click)="changeUserRole(user, 'user')">Usuário Comum</nb-list-item>
+                        </nb-list>
+                    </ng-template>
+                </td>
+                <td>{{user?.signature.gym ? user?.signature.gym.title : '---'}}</td>
+                <!-- <td><nb-checkbox (checkedChange)="toggle($event)"></nb-checkbox></td> -->
+                <td>
+                    <!-- <button nbButton (click)="openDialog(addOrUpdateDialog, user)" status="success" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                    </button> -->
+                    <button nbButton (click)="openDeleteConfirmation(deleteDialog)" status="danger" type="button"
+                        class="form-btn" ghost>
+                        <nb-icon icon="trash-outline"></nb-icon>
+                    </button>
+
+                    <ng-template #deleteDialog let-data let-ref="dialogRef">
+                        <nb-card>
+                            <nb-card-header>Confirmação de Exclusão</nb-card-header>
+                            <nb-card-body>
+                                Confirma a exclusão da conta de {{user?.name}} da base de dados? Essa ação é
+                                irreversível.
+                            </nb-card-body>
+                            <nb-card-footer>
+                                <button (click)="ref.close()" nbButton status="danger" type="button">
+                                    Cancelar
+                                </button>
+                                <button (click)="deleteUser(user?.id); ref.close()" nbButton status="success"
+                                    type="button">
+                                    Sim, excluir conta
+                                </button>
+                            </nb-card-footer>
+                        </nb-card>
+                    </ng-template>
+                </td>
+            </tr>
+        </table>
+    </nb-card-body>
+</nb-card>
