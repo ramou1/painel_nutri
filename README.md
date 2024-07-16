@@ -1,6 +1,6 @@
 # Painel Nutri
 
-Projeto [Web Nutri] (https://ramou1.github.io/painel_nutri/) de administrador criado na versão 15.1.2 do Angular, como. (Todos os dados são mockados)
+Projeto [Web Nutri](https://ramou1.github.io/painel_nutri/) de administrador criado na versão 15.1.2 do Angular, como. (Todos os dados são mockados)
 
 ## Grupos de Ingredientes
 
