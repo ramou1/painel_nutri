@@ -44,9 +44,9 @@ Para adicionar uma receita, o usuário deve digitar as seguintes informações:
 - Restrições Alimentares (Diabético, Alérgico à proteína do leite, Intolerante à lactose, Vegano, Ovolactovegetariano, Ovovegetariano, Lactovegetariano e/ou Celíaco)
 - Onde a receita pode ser usada (Café da Manhã, Lanche da Manhã, Almoço, Lanche, Jantar e/ou Ceia)
 
-^Todos os macros são somados automaticamente ao se escolher um ingrediente com sua respectiva quantidade.^
+Todos os macros são somados automaticamente ao se escolher um ingrediente com sua respectiva quantidade.
 
-^A pessoa também pode optar por adicionar os macros manualmente (Valor Energético (kcal), Carboidratos totais, Açúcares totais, Açúcares adicionados, Proteínas, Gorduras totais, Gorduras saturadas, Gorduras trans, Fibra alimentar, Sódio).^
+A pessoa também pode optar por adicionar os macros manualmente (Valor Energético (kcal), Carboidratos totais, Açúcares totais, Açúcares adicionados, Proteínas, Gorduras totais, Gorduras saturadas, Gorduras trans, Fibra alimentar, Sódio).
 
 ## Parceiros
 Página onde são listadas todos os parceiros (academias) que o usuário pode escolher na hora do cadastro.</br>
