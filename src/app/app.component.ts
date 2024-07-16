@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { NbMenuItem } from '@nebular/theme';
+import { NbMenuItem, NbSidebarService } from '@nebular/theme';
 import { BasePage } from './services/base-page.service';
 import { NavigationEnd } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -20,7 +20,7 @@ export class AppComponent extends BasePage implements OnInit {
 
   public menu: NbMenuItem[] = [
     {
-      title: 'Início',
+      title: 'Dashboard',
       icon: 'home-outline',
       link: '/dashboard',
       pathMatch: 'full',
@@ -67,7 +67,7 @@ export class AppComponent extends BasePage implements OnInit {
     },
   ];
 
-  constructor(public injector: Injector) {
+  constructor(public injector: Injector, private sidebarService: NbSidebarService) {
     super(injector);
   }
 
@@ -96,6 +96,10 @@ export class AppComponent extends BasePage implements OnInit {
       this.shortName = this.user.name.split(' ')[0];
     }
   }
+
+  async openSettings() { }
+
+  async openNotifications() { }
 
   async logout() {
     await this.router.navigate(['/login']);

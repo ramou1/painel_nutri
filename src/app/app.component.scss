@@ -1,17 +1,28 @@
+nb-sidebar {
+    margin: 15px;
+    margin-right: 0;
+    border-radius: 20px;
+}
+
 nb-layout-header {
+    border-radius: 15px;
+    margin-bottom: 15px;
+    display: flex !important;
+    justify-content: flex-end;
     background: #359D9E;
 
     .profile-picture {
-        margin-right: 10px;
+        margin: 0 10px;
 
         >img {
             border-radius: 50%;
-            width: 36px !important;
-            height: 36px !important;
+            width: 32px !important;
+            height: 32px !important;
         }
     }
 
     nb-icon {
+        height: 20px;
         color: #fff;
     }
 }
@@ -19,25 +30,26 @@ nb-layout-header {
 .logo {
     max-width: 150px;
     margin: 0 auto;
-    margin-top: 18%;
-    margin-bottom: 10%;
+    margin-bottom: 3vh;
     display: block;
 }
 
-.first-column {
-    font-weight: 600;
+.user-name {
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 13px;
     color: #fff;
 }
 
 .second-column {
     margin-left: auto;
     margin-right: 1%;
-}
 
-// nb-icon svg {
-//     min-height: 22px !important;
-//     min-width: 22px !important;
-// }
+    nb-icon:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+    }
+}
 
 nb-layout-footer {
     span {

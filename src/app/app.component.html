@@ -1,38 +1,37 @@
 <nb-layout>
 
-  <nb-layout-header *ngIf="activatedTab" fixed>
-
-    <div class="profile-picture">
-      <img [src]="user?.image || '../assets/images/no-profile-picture.png'">
-    </div>
-    <span class="first-column">Olá {{ user?.name }}, seja bem vind{{user?.gender === 'female' ? 'a' : 'o'}}.</span>
-
-    <nb-tag-list class="second-column">
-      <nb-tag appearance="filled" text="Sandbox (Apenas Teste)" status="warning" *ngIf="!production"></nb-tag>
-      <nb-tag appearance="filled" text="Em Produção" status="info" *ngIf="production"></nb-tag>
-    </nb-tag-list>
-
+  <nb-layout-header subheader> <!-- fixed -->
+    <button nbButton ghost size="large" class="second-column" (click)="openSettings()">
+      <nb-icon icon="settings-outline"></nb-icon>
+    </button>
+    <button nbButton ghost size="large" class="second-column" (click)="openNotifications()">
+      <nb-icon icon="bell-outline"></nb-icon>
+    </button>
     <button nbButton ghost size="large" class="second-column" (click)="logout()">
       <nb-icon icon="power-outline"></nb-icon>
     </button>
-
+    <div class="profile-picture">
+      <img [src]="user?.image || '../assets/images/no-profile-picture.png'">
+    </div>
+    <span class="user-name">{{ user?.name }}</span>
   </nb-layout-header>
 
-  <nb-sidebar state="expanded" *ngIf="activatedTab">
+
+  <nb-sidebar state="expanded">
     <img class="logo" src="assets/images/logo-meelnutri.svg" alt="">
     <nb-menu [items]="menu"></nb-menu>
   </nb-sidebar>
+
 
   <nb-layout-column>
     <router-outlet></router-outlet>
   </nb-layout-column>
 
-  <nb-layout-footer fixed>
+  <!-- <nb-layout-footer fixed>
     <a href="https://be220.com" target="_blank"><img src="assets/images/icon_be.svg" alt=""></a>
     <span>
-      Desenvolvimento de apps mobile e softwares web para
-      transformar o seu negócio.
+      Desenvolvido por Ramon Oliveira.
     </span>
-  </nb-layout-footer>
+  </nb-layout-footer> -->
 
 </nb-layout>

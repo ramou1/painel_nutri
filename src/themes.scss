@@ -31,8 +31,23 @@ $nb-themes: nb-register-theme((
   font-family: 'Poppins' !important;
 }
 
+.content {
+  margin: 15px !important;
+}
+
 div.divisor {
   height: 3px;
   background: #bff6e0;
   margin: 45px 0;
 }
+
+.nb-theme-corporate {
+  --layout-padding: 0 !important;
+  // --layout-padding: 2.25rem 2.25rem 0.75rem !important;
+}
+
+// colors
+// #5B453E // marrom
+// #F8F1EC // branco
+// #F0E5DD // bege
+// #9FA392 // verde
