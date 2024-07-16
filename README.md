@@ -60,6 +60,7 @@ Página onde são listados todos os usuários cadastrados no sistema, desde os u
 ## Privacidade e Termos
 Página onde são listadas as Políticas de Privacidade e os Termos de Uso que são mostrados no aplicativo.
 
+<!-- ng build --base-href /painel_nutri/  -->
 
 <!-- referencias:
 
